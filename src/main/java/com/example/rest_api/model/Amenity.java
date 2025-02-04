@@ -1,3 +1,4 @@
+// src\main\java\com\example\rest_api\model\Amenity.java
 package com.example.rest_api.model;
 
 import lombok.Data;

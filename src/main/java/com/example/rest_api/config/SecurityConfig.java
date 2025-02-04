@@ -1,3 +1,4 @@
+// src\main\java\com\example\rest_api\config
 package com.example.rest_api.config;
 
 import org.springframework.context.annotation.Bean;

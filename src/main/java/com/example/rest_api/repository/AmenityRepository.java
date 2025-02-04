@@ -1,3 +1,5 @@
+
+//E:\01 Travifai\rest-api\src\main\java\com\example\rest_api\repository\AmenityRepository.java
 package com.example.rest_api.repository;
 
 import com.example.rest_api.model.Amenity;
