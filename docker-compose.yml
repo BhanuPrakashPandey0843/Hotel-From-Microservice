@@ -1,9 +1,27 @@
 version: '3.8'
 
 services:
+  prometheus:
+    image: prom/prometheus:v2.35.0
+    container_name: prometheus
+    restart: unless-stopped
+    networks:
+      - backend_network  # Custom network
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml  # Corrected path
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    depends_on:
+      - rest-api  # Ensure rest-api starts before Prometheus
+      - mongo  # Ensure MongoDB is available
+
   mongo:
     image: mongo:latest
     container_name: mongo-db
+    networks:
+      - backend_network
     environment:
       MONGO_INITDB_DATABASE: hotel-db
     ports:
@@ -12,10 +30,16 @@ services:
   rest-api:
     build: .
     container_name: rest-api
+    networks:
+      - backend_network
     ports:
       - "8080:8080"
     depends_on:
       - mongo
     environment:
-      - spring.data.mongodb.uri=mongodb://mongo:27017/hotel-db
-      - spring.data.mongodb.database=hotel-db
+      - SPRING_DATA_MONGODB_URI=mongodb://mongo:27017/hotel-db
+      - SPRING_DATA_MONGODB_DATABASE=hotel-db
+
+networks:
+  backend_network:
+    driver: bridge
